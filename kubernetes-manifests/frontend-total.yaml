@@ -9,13 +9,14 @@ spec:
   ports:
     - name: http-frontend
       protocol: TCP
-      port: 80
+      port: 3000
       targetPort: 3000
-#      nodePort: 30430
+      nodePort: 30430
   selector:
     app: acmefit
     service: frontend
-  type: LoadBalancer
+  #type: LoadBalancer
+  type: NodePort 
 ---
 apiVersion: apps/v1 # for versions before 1.8.0 use apps/v1beta1
 kind: Deployment
@@ -38,6 +39,8 @@ spec:
         app: acmefit
         service: frontend
     spec:
+      nodeSelector:
+        apptype: acme
       containers:
       - image: gcr.io/vmwarecloudadvocacy/acmeshop-front-end:latest
         name: frontend
@@ -61,7 +64,7 @@ spec:
         - name: ORDER_PORT
           value: '6000'
         - name: JAEGER_AGENT_HOST
-          value: 'localhost'
+          value: '172.17.0.22'
         - name: JAEGER_AGENT_PORT
           value: '6832'
         ports:

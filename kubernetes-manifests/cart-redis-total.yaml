@@ -33,6 +33,8 @@ spec:
         app: acmefit  # has to match .spec.selector.matchLabels
         service: cart-redis
     spec:
+      nodeSelector:
+        apptype: acme
       containers:
         - name: cart-redis
           image: bitnami/redis

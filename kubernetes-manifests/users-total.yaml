@@ -35,6 +35,8 @@ spec:
         app: acmefit
         service: users
     spec:
+      nodeSelector:
+        apptype: acme
       volumes:
       - name: acmefit-users-data
         emptyDir: {}
@@ -66,7 +68,7 @@ spec:
               name: users-redis-pass
               key: password
         - name: JAEGER_AGENT_HOST
-          value: 'localhost'
+          value: '172.17.0.22'
         - name: JAEGER_AGENT_PORT
           value: '6831'
         ports:

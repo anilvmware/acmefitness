@@ -33,6 +33,8 @@ spec:
         app: acmefit  # has to match .spec.selector.matchLabels
         service: users-mongo
     spec:
+      nodeSelector:
+        apptype: acme
       containers:
         - name: users-mongo
           image: mongo:4

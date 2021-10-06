@@ -18,4 +18,10 @@
 
 4. Click on 'New Test' and provide the number of users to simulate. 
 
+NOTE (Oct-2021):
+There have been several changes to Locust since this document was written which 
+required code updates. 
+
+Further, if installing the latest Locust distro. skip Step(1). 
+
 

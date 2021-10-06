@@ -7,9 +7,10 @@ metadata:
     service: order-db
 spec:
   ports:
-    - port: 5432
-      name: postgres-order
+    - name: postgres-order
       protocol: TCP
+      port: 5432
+      targetPort: 5432
   selector:
     app: acmefit
     service: order-db
@@ -38,6 +39,8 @@ spec:
         app: acmefit
         service: order-db
     spec:
+      nodeSelector:
+        apptype: acme
       containers:
       - name: postgres
         image: postgres:9.5

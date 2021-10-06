@@ -61,6 +61,8 @@ items:
                   protocol: TCP
                 - containerPort: 9411
                   protocol: TCP
+              args:
+                - --reporter.grpc.host-port=172.17.0.24:12345
               readinessProbe:
                 httpGet:
                   path: "/"

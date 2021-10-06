@@ -1,8 +1,9 @@
 # This program will generate traffic for ACME Fitness Shop App. It simulates both Authenticated and Guest user scenarios. You can run this program either from Command line or from
 # the web based UI. Refer to the "locust" documentation for further information. 
 
-from locust import HttpLocust, TaskSet, task, TaskSequence, seq_task, Locust
+from locust import HttpUser, TaskSet, SequentialTaskSet, task, Locust, between
 import random
+import pdb
 
 # List of users (pre-loaded into ACME Fitness shop)
 users = ["eric", "phoebe", "dwight", "han"] 
@@ -13,13 +14,13 @@ products = []
 import logging
 
 # GuestUserBrowsing simulates traffic for a Guest User (Not logged in)
-class GuestUserBrowsing(TaskSequence):
+class GuestUserBrowsing(SequentialTaskSet):
 
     def on_start(self):
         self.getProducts()
 
     def listCatalogItems(self):
-        items = self.client.get("/products").json()["data"]
+        items = self.client.get("products").json()["data"]
         for item in items:
             products.append(item["id"])
         return products
@@ -27,55 +28,51 @@ class GuestUserBrowsing(TaskSequence):
     @task(1)
     def getProducts(self):
         logging.info("Guest User - Get Products")
-        self.client.get("/products")
+        self.client.get("products")
 
     @task(2)
     def getProduct(self):
         logging.info("Guest User - Get a product")
         products = self.listCatalogItems()
         id = random.choice(products)
-        product = self.client.get("/products/"+ id).json()
+        product = self.client.get("products/"+ id).json()
         logging.info("Product info - " +  str(product))
         products.clear()
 
 # AuthUserBrowsing simulates traffic for Authenticated Users (Logged in)
-class AuthUserBrowsing(TaskSequence):
+class AuthUserBrowsing(SequentialTaskSet):
 
     def on_start(self):
         self.login()
     
-    @seq_task(1)
     @task(1)
     def login(self):
         user = random.choice(users)
         logging.info("Auth User - Login user " + user)
-        body = self.client.post("/login/", json={"username": user, "password":"vmware1!"}).json()
-        self.locust.userid = body["token"]
+        body = self.client.post("login/", json={"username": user, "password":"vmware1!"}).json()
+        self.user.userid = body["access_token"]
 
-    @seq_task(2)
     @task(1)
     def getProducts(self):
         logging.info("Auth User - Get Catalog")
-        self.client.get("/products")
+        self.client.get("products")
 
-    @seq_task(3)
     @task(2)
     def getProduct(self):
         logging.info("Auth User - Get a product")
         products = self.listCatalogItems()
         id = random.choice(products)
-        product = self.client.get("/products/"+ id).json()
+        product = self.client.get("products/"+ id).json()
         logging.info("Product info - " +  str(product))
         products.clear()
 
     
-    @seq_task(4)
     @task(2)
     def addToCart(self):
         self.listCatalogItems()
         productid = random.choice(products)
-        logging.info("Add to Cart for user " + self.locust.userid)
-        cart = self.client.post("/cart/item/add/" + self.locust.userid, json={
+        logging.info("Add to Cart for user " + self.user.userid)
+        cart = self.client.post("cart/item/add/" + self.user.userid, json={
                   "name": productid,
                   "price": "100",
                   "shortDescription": "Test add to cart",
@@ -85,11 +82,10 @@ class AuthUserBrowsing(TaskSequence):
         products.clear()
 
     
-    @seq_task(5)
-    @task(1)
+    @task
     def checkout(self):
-        userCart = self.client.get("/cart/items/" + self.locust.userid).json()
-        order = self.client.post("/order/add/"+ self.locust.userid, json={ "userid":"8888",
+        userCart = self.client.get("cart/items/" + self.user.userid).json()
+        order = self.client.post("order/add/"+ self.user.userid, json={ "userid":"8888",
                 "firstname":"Eric",
                 "lastname": "Cartman",
                 "address":{
@@ -115,7 +111,7 @@ class AuthUserBrowsing(TaskSequence):
 
 
     def listCatalogItems(self):
-        items = self.client.get("/products").json()["data"]
+        items = self.client.get("products").json()["data"]
         for item in items:
             products.append(item["id"])
         return products
@@ -125,17 +121,18 @@ class AuthUserBrowsing(TaskSequence):
         self.client.get("/")
 
 
-class UserBehavior(TaskSet):
+class UserBehavior(SequentialTaskSet):
 
-    tasks = {AuthUserBrowsing:2, GuestUserBrowsing:1}
+    tasks = [AuthUserBrowsing, GuestUserBrowsing]
 
 
-class WebSiteUser(HttpLocust):
+class WebSiteUser(HttpUser):
 
-    task_set = UserBehavior
+    tasks = [UserBehavior]
     userid = ""
-    min_wait = 2000
-    max_wait = 10000
+    #min_wait = 2000
+    #max_wait = 10000
+    wait_time = between(0.5, 3)
     
 
 

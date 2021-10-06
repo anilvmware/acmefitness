@@ -35,6 +35,8 @@ spec:
         app: acmefit
         service: catalog
     spec:
+      nodeSelector:
+        apptype: acme
       volumes:
       - name: acmefit-catalog-data
         emptyDir: {}
@@ -63,7 +65,7 @@ spec:
         - name: USERS_PORT
           value: '8083'
         - name: JAEGER_AGENT_HOST
-          value: 'localhost'
+          value: '172.17.0.22'
         - name: JAEGER_AGENT_PORT
           value: '6831'
         ports:

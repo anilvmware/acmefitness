@@ -38,6 +38,8 @@ spec:
       volumes:
       - name: acmefit-cart-data
         emptyDir: {}
+      nodeSelector:
+        apptype: acme
       containers:
       - image: gcr.io/vmwarecloudadvocacy/acmeshop-cart:latest
         imagePullPolicy: "Always"
@@ -59,7 +61,7 @@ spec:
         - name: USER_PORT
           value: '8083'
         - name: JAEGER_AGENT_HOST
-          value: 'localhost'
+          value: '172.17.0.22'
         - name: JAEGER_AGENT_PORT
           value: '6831'
         - name: AUTH_MODE
