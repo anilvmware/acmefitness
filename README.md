@@ -61,6 +61,10 @@ Other deployment modes coming soon
 * [kubernetes-manifest](./kubernetes-manifests)
 * [aws-fargate](./aws-fargate)
 
+4. Optionally, you may use the deploy_acme.py to create deployments/svc and also deploy the collector and proxy in the wavefront namespaces. 
+
+   - Ensure parameters are updated accordingly in deploy_acme.yaml
+
 ### Additional Info
 
 The [traffic-generator](./traffic-generator) is based on **locust** and can be used to create various traffic patterns, if you need it for other demos associated with **Monitoring and Observability.**

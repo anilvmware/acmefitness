@@ -18,10 +18,22 @@
 
 4. Click on 'New Test' and provide the number of users to simulate. 
 
-NOTE (Oct-2021):
-There have been several changes to Locust since this document was written which 
-required code updates. 
+### Local changes (Oct-'21)
 
-Further, if installing the latest Locust distro. skip Step(1). 
+There have been several changes to Locust since the time this document was written. Following are changes/updates to locustfile.py:
+
+ - Deprecation of TaskSequence and replacement with SequentialTaskSet
+
+ - Remove decorator seq_task()
+
+ - Replace class inheritance of TaskSequence with SequentialTaskSet
+
+ - Remove min_wait, max_wait and replace with between()
+
+ - Some of the urls have been updated so that locust cli is:
+   /Users/ssharat/Library/Python/3.8/bin/locust "--host=http://127.0.0.1:55767/"
+
+NOTE:
+If installing the latest Locust distro. skip Step(1) - versions in requirements.txt are deprecated. 
 
 

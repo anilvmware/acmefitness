@@ -5,7 +5,7 @@ import json
 import re
 
 BASE_PATH = '/Users/ssharat/Documents/'
-INPUT_YAML = BASE_PATH + 'acme/acme_fitness_demo/kubernetes-manifests/deploy_acme.yaml'
+INPUT_YAML = BASE_PATH + 'acme/acme_fitness_demo/deploy_acme.yaml'
 
 
 class DeployApplication(object):

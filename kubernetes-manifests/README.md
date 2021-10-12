@@ -166,3 +166,20 @@ The current version of the application has been augmented with distributed traci
 To avoid issues with unresolvable hostnames, `JAEGER_AGENT_HOST` is set to `localhost` in all of the manifests in this repo. To use tracing, this value will need to be replaced. If using the `jaeger-all-in-one.yml` manifest included in this repo, this value should be changed to `jaeger.<jaeger namespace>`.
 
 It is strongly recommended that the `JAEGER_AGENT_PORT` values not be modified as the tracing library implementations for specific languages favor certain ports.
+
+### Local changes (Oct-'21)
+Following changes were made to the manifest files:
+ - JAEGER_AGENT_HOST is updated with ip-address:port of the jaeger-agent svc (use the deploy_acme.py script to update the config)
+ - Update jaeger-all-in-one.yaml with proxy ip as args:
+         spec:
+          containers:
+          -   env:
+              - name: COLLECTOR_ZIPKIN_HTTP_PORT
+                value: "9411"
+              image: jaegertracing/all-in-one
+              name: jaeger
+              .
+              .
+              args:
+                - --reporter.grpc.host-port=172.17.0.24:12345 
+ - Update point-of-sales.yaml with front-end pod ip

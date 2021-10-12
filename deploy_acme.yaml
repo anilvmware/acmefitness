@@ -11,18 +11,18 @@ acme_application:
     - generic users-mongo-pass --from-literal=password=ca$hc0w
     - generic users-redis-pass --from-literal=password=ca$hc0w
   deploy:
-    - cart-redis-total.yaml
-    - cart-total.yaml
-    - catalog-db-total.yaml
-    - catalog-total.yaml
-    - payment-total.yaml
-    - order-db-total.yaml
-    - order-total.yaml
-    - users-db-total.yaml
-    - users-redis-total.yaml
-    - users-total.yaml
-    - frontend-total.yaml
-    - point-of-sales-total.yaml
+    - kubernetes-manifests/cart-redis-total.yaml
+    - kubernetes-manifests/cart-total.yaml
+    - kubernetes-manifests/catalog-db-total.yaml
+    - kubernetes-manifests/catalog-total.yaml
+    - kubernetes-manifests/payment-total.yaml
+    - kubernetes-manifests/order-db-total.yaml
+    - kubernetes-manifests/order-total.yaml
+    - kubernetes-manifests/users-db-total.yaml
+    - kubernetes-manifests/users-redis-total.yaml
+    - kubernetes-manifests/users-total.yaml
+    - kubernetes-manifests/frontend-total.yaml
+    - kubernetes-manifests/point-of-sales-total.yaml
   configmap:
     - catalog-db-initdb-configmap.yaml
     - users-db-initdb-configmap.yaml

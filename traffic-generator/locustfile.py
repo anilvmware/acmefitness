@@ -130,8 +130,6 @@ class WebSiteUser(HttpUser):
 
     tasks = [UserBehavior]
     userid = ""
-    #min_wait = 2000
-    #max_wait = 10000
     wait_time = between(0.5, 3)
     
 
